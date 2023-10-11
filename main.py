@@ -15,17 +15,22 @@ class Board(TwoPlayerGame):
 
     def possible_moves(self):
         moves = []
-        for row in range(self.size):
-            for col in range(self.size):
-                if self.board[row][col] == '.':
-                    moves.append((row, col))
+        for row in range(1, self.size + 1):
+            for col in range(1, self.size + 1):
+                if self.board[row - 1][col - 1] == '.':
+                    moves.append('{},{}'.format(row, col))
         return moves
 
     def make_move(self, coord):
-        row = coord[0]
-        col = coord[1]
+        coord_data = coord.split(',')
+        row = int(coord_data[0]) - 1
+        col = int(coord_data[1]) - 1
         if self.board[row][col] == '.':
-            self.board[row][col] = self.current_player
+            if game.current_player == 1:
+                symbol = 'x'
+            else:
+                symbol = 'o'
+            self.board[row][col] = symbol
             return True
         else:
             return False
@@ -43,7 +48,7 @@ class Board(TwoPlayerGame):
         for start_row in range(len(self.board)):
             for start_col in range(len(self.board[0])):
                 symbol = self.board[start_row][start_col]
-                if symbol in [1, 2]:
+                if symbol in ['x', 'o']:
                     for dr, dc in directions:
                         if check_direction(start_row, start_col, dr, dc, symbol):
                             return True
@@ -59,33 +64,33 @@ class Board(TwoPlayerGame):
         return 100 if self.win() else 0
 
 
-def main():
-    size = 9
-    board = Board(size)
+# def main():
+#     ai = Negamax(10)  # The AI will think 10 moves in advance
+#     game = Board([AI_Player(ai), Human_Player()])
+#     history = game.play()
+#
+#     while True:
+#         game.show()
+#         moves = game.possible_moves()
+#         print(f'Possible moves: {moves}')
+#
+#         coord = []
+#         row = int(input(f'Player {game.current_player}, enter row (1-9): ')) - 1
+#         coord.append(row)
+#         col = int(input(f'Player {game.current_player}, enter col (1-9): ')) - 1
+#         coord.append(col)
+#
+#         # if coord in moves:
+#         #     if game.make_move(coord):
+#         #         if game.win():
+#         #             game.show()
+#         #             print(f'Player {game.current_player} wins!')
+#         #             break
+#         #
+#         # else:
+#         #     print('Invalid move. Try again.')
 
-    while True:
-        board.show()
-        moves = board.possible_moves()
-        print(f'Possible moves: {moves}')
-
-        coord = []
-        row = int(input(f'Player {board.current_player}, enter row (1-9): ')) - 1
-        coord.append(row)
-        col = int(input(f'Player {board.current_player}, enter col (1-9): ')) - 1
-        coord.append(col)
-
-        if coord in moves:
-            if board.make_move(coord):
-                if board.win():
-                    board.show()
-                    print(f'Player {board.current_player} wins!')
-                    break
-
-                board.switch_player()
-        else:
-            print('Invalid move. Try again.')
-
-
-ai = Negamax(10)  # The AI will think 10 moves in advance
-game = Board([AI_Player(ai), Human_Player()])
+#
+ai = Negamax(5)  # The AI will think 10 moves in advance
+game = Board([Human_Player(), AI_Player(ai)])
 history = game.play()
