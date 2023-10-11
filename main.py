@@ -6,7 +6,7 @@ class Board(TwoPlayerGame):
         self.players = players
         self.size = 9
         self.board = [['.' for _ in range(self.size)] for _ in range(self.size)]
-        self.current_player = 'x'
+        self.current_player = 1
 
     def show(self):
         print("  " + " ".join(str(i) for i in range(1, len(self.board) + 1)))
@@ -43,7 +43,7 @@ class Board(TwoPlayerGame):
         for start_row in range(len(self.board)):
             for start_col in range(len(self.board[0])):
                 symbol = self.board[start_row][start_col]
-                if symbol in ['x', 'o']:
+                if symbol in [1, 2]:
                     for dr, dc in directions:
                         if check_direction(start_row, start_col, dr, dc, symbol):
                             return True
