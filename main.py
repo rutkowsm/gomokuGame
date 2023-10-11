@@ -9,6 +9,10 @@ class Board(TwoPlayerGame):
         self.current_player = 1
 
     def show(self):
+        """Prints index numbers on the board numbered 1 - {size}
+        Parameters: none
+        Returns: none
+        """
         print("  " + " ".join(str(i) for i in range(1, len(self.board) + 1)))
         for i in range(len(self.board)):
             print(f"{i + 1} {' '.join(self.board[i])}")
@@ -22,6 +26,10 @@ class Board(TwoPlayerGame):
         return moves
 
     def make_move(self, coord):
+        """
+        :param coord: a list of two strings taken from movement input later split into two values and cast to integers
+        :return: True / False
+        """
         coord_data = coord.split(',')
         row = int(coord_data[0]) - 1
         col = int(coord_data[1]) - 1
@@ -91,6 +99,6 @@ class Board(TwoPlayerGame):
 #         #     print('Invalid move. Try again.')
 
 #
-ai = Negamax(5)  # The AI will think 10 moves in advance
+ai = Negamax(3)  # The AI will think 10 moves in advance
 game = Board([Human_Player(), AI_Player(ai)])
 history = game.play()
