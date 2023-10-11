@@ -58,28 +58,32 @@ class Board(TwoPlayerGame):
         return 100 if self.win() else 0
 
 
-# def main():
-#     size = 9
-#     board = Board(size)
-#
-#     while True:
-#         board.show()
-#         moves = board.possible_moves()
-#         print(f'Possible moves: {moves}')
-#
-#         row = int(input(f'Player {board.current_player}, enter row (1-{size}): ')) - 1
-#         col = int(input(f'Player {board.current_player}, enter col (1-{size}): ')) - 1
-#
-#         if (row, col) in moves:
-#             if board.make_move(row, col):
-#                 if board.win():
-#                     board.show()
-#                     print(f'Player {board.current_player} wins!')
-#                     break
-#
-#                 board.switch_player()
-#         else:
-#             print('Invalid move. Try again.')
+def main():
+    size = 9
+    board = Board(size)
+
+    while True:
+        board.show()
+        moves = board.possible_moves()
+        print(f'Possible moves: {moves}')
+
+        coord = []
+        row = int(input(f'Player {board.current_player}, enter row (1-9): ')) - 1
+        coord.append(row)
+        col = int(input(f'Player {board.current_player}, enter col (1-9): ')) - 1
+        coord.append(col)
+
+
+        if (coord) in moves:
+            if board.make_move(coord):
+                if board.win():
+                    board.show()
+                    print(f'Player {board.current_player} wins!')
+                    break
+
+                board.switch_player()
+        else:
+            print('Invalid move. Try again.')
 
 
 ai = Negamax(10)  # The AI will think 10 moves in advance
