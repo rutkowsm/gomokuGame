@@ -2,24 +2,16 @@ from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
 
 
 class Board(TwoPlayerGame):
-    def __init__(self, size):
-        self.size = size
-        self.board = [['.' for _ in range(size)] for _ in range(size)]
+    def __init__(self, players=None):
+        self.players = players
+        self.size = 9
+        self.board = [['.' for _ in range(self.size)] for _ in range(self.size)]
         self.current_player = 'x'
 
     def show(self):
         print("  " + " ".join(str(i) for i in range(1, len(self.board) + 1)))
         for i in range(len(self.board)):
             print(f"{i + 1} {' '.join(self.board[i])}")
-
-    def make_move(self, coord):
-        row = coord(0)
-        col = coord(1)
-        if self.board[row][col] == '.':
-            self.board[row][col] = self.current_player
-            return True
-        else:
-            return False
 
     def possible_moves(self):
         moves = []
@@ -28,6 +20,15 @@ class Board(TwoPlayerGame):
                 if self.board[row][col] == '.':
                     moves.append((row, col))
         return moves
+
+    def make_move(self, coord):
+        row = coord[0]
+        col = coord[1]
+        if self.board[row][col] == '.':
+            self.board[row][col] = self.current_player
+            return True
+        else:
+            return False
 
     def win(self):
         directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
@@ -51,8 +52,8 @@ class Board(TwoPlayerGame):
     def is_over(self):
         return self.win() or all(cell != '.' for row in self.board for cell in row)
 
-    def switch_player(self):
-        self.current_player = 'o' if self.current_player == 'x' else 'x'
+    # def switch_player(self):
+    #     self.current_player = 'o' if self.current_player == 'x' else 'x'
 
     def scoring(self):
         return 100 if self.win() else 0
@@ -73,8 +74,7 @@ def main():
         col = int(input(f'Player {board.current_player}, enter col (1-9): ')) - 1
         coord.append(col)
 
-
-        if (coord) in moves:
+        if coord in moves:
             if board.make_move(coord):
                 if board.win():
                     board.show()
