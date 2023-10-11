@@ -1,3 +1,11 @@
+"""
+Autorzy:
+Hołdakowski, Mikołaj
+Rutkowski, Marcin (s12497)
+Gra Gomoku
+Zasady: https://en.wikipedia.org/wiki/Gomoku
+"""
+
 from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
 
 
