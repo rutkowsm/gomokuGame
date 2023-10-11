@@ -77,7 +77,41 @@ class Board(TwoPlayerGame):
     #     self.current_player = 'o' if self.current_player == 'x' else 'x'
 
     def scoring(self):
-        return 100 if self.win() else 0
+        if self.win():
+            if self.current_player == 1:
+                return 100
+            else:
+                return -100
+        score = 0
+        for row in range(self.size):
+            for col in range(self.size):
+                symbol = self.board[row][col]
+                if symbol == 'x':
+                    score += self.evaluate_position(row, col, 'x')
+                elif symbol == 'o':
+                    score -= self.evaluate_position(row, col, 'o')
+        return score
+
+    def evaluate_position(self, row, col, symbol):
+        score = 0
+        if (row, col) in [(2, 2), (2, 4), (4, 2), (4, 4)]:
+            score += 5  # Center control
+        for dr, dc in [(0, 1), (1, 0), (1, 1), (1, -1)]:
+            threat = False
+            for i in range(5):
+                r, c = row + i * dr, col + i * dc
+                if not (0 <= r < self.size and 0 <= c < self.size):
+                    break
+                if self.board[r][c] == symbol:
+                    score += 1  # Pieces in a row
+                elif self.board[r][c] == '.':
+                    if threat:
+                        score += 2  # Win Threats
+                    else:
+                        score += 1  # Open position
+                else:
+                    threat = True
+        return score
 
 
 # def main():
