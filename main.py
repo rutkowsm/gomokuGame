@@ -1,31 +1,44 @@
 """
 Autorzy:
-Hołdakowski, Mikołaj
+Hołdakowski, Mikołaj (s23739)
 Rutkowski, Marcin (s12497)
 Gra Gomoku
 Zasady: https://en.wikipedia.org/wiki/Gomoku
 """
-
+import pydoc
 from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
-
 
 class Board(TwoPlayerGame):
     def __init__(self, players=None):
+        """
+        Initialization of the Gomoku game
+
+        ":param" players (list) a Human_Player then AI_Player.
+        :returns: None
+        """
         self.players = players
         self.size = 9
         self.board = [['.' for _ in range(self.size)] for _ in range(self.size)]
         self.current_player = 1
 
     def show(self):
-        """Prints index numbers on the board numbered 1 - {size}
-        Parameters: none
-        Returns: none
+        """
+        Displays the board with index numbers from 1 to 'size'.
+
+        :param: None
+        :returns: None
         """
         print("  " + " ".join(str(i) for i in range(1, len(self.board) + 1)))
         for i in range(len(self.board)):
             print(f"{i + 1} {' '.join(self.board[i])}")
 
     def possible_moves(self):
+        """
+        Returns a list of available moves on the board.
+
+        :param: None
+        :returns: list of available moves as a pair of coordinates (first rows then columns).
+        """
         moves = []
         for row in range(1, self.size + 1):
             for col in range(1, self.size + 1):
@@ -35,8 +48,10 @@ class Board(TwoPlayerGame):
 
     def make_move(self, coord):
         """
+        Makes a move.
+
         :param coord: a list of two strings taken from movement input later split into two values and cast to integers
-        :return: True / False
+        :returns: True / False
         """
         coord_data = coord.split(',')
         row = int(coord_data[0]) - 1
@@ -52,6 +67,12 @@ class Board(TwoPlayerGame):
             return False
 
     def win(self):
+        """
+        Checks if there is a winning move on the board
+
+        :param: None
+        :returns: True / False - True when there is a winning move, False when not
+        """
         directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
         def check_direction(start_row, start_col, dr, dc, symbol):
@@ -71,12 +92,24 @@ class Board(TwoPlayerGame):
         return False
 
     def is_over(self):
+        """
+        Checks if the game is over by win or draw.
+
+        :param: None
+        :returns: True / False - True when there is game over
+        """
         return self.win() or all(cell != '.' for row in self.board for cell in row)
 
     # def switch_player(self):
     #     self.current_player = 'o' if self.current_player == 'x' else 'x'
 
     def scoring(self):
+        """
+        Calculating Score of current game state
+
+        :param: None
+        :returns: Score of the current game state as int.
+        """
         if self.win():
             if self.current_player == 1:
                 return 100
@@ -93,6 +126,16 @@ class Board(TwoPlayerGame):
         return score
 
     def evaluate_position(self, row, col, symbol):
+        """
+        Evaluates the position on the board for a given player using tactical approach, it judges every single field
+        instead of whole board altogether.
+
+        :param row: Row number.
+        :param col: Column number.
+        :param symbol: Player symbol ('x' or 'o').
+
+        :returns: Score of the position for the given player as int.
+        """
         score = 0
         if (row, col) in [(2, 2), (2, 4), (4, 2), (4, 4)]:
             score += 5  # Center control
@@ -114,33 +157,7 @@ class Board(TwoPlayerGame):
         return score
 
 
-# def main():
-#     ai = Negamax(10)  # The AI will think 10 moves in advance
-#     game = Board([AI_Player(ai), Human_Player()])
-#     history = game.play()
-#
-#     while True:
-#         game.show()
-#         moves = game.possible_moves()
-#         print(f'Possible moves: {moves}')
-#
-#         coord = []
-#         row = int(input(f'Player {game.current_player}, enter row (1-9): ')) - 1
-#         coord.append(row)
-#         col = int(input(f'Player {game.current_player}, enter col (1-9): ')) - 1
-#         coord.append(col)
-#
-#         # if coord in moves:
-#         #     if game.make_move(coord):
-#         #         if game.win():
-#         #             game.show()
-#         #             print(f'Player {game.current_player} wins!')
-#         #             break
-#         #
-#         # else:
-#         #     print('Invalid move. Try again.')
-
-#
-ai = Negamax(3)  # The AI will think 10 moves in advance
+ai = Negamax(3)  # The AI will think n moves in advance
 game = Board([Human_Player(), AI_Player(ai)])
+pydoc.doc(Board)
 history = game.play()
